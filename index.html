@@ -249,6 +249,8 @@ mark{background:color-mix(in srgb,var(--sun) 55%,transparent);color:inherit;bord
 @media (max-width:760px){.nav{flex-direction:column;align-items:flex-start;padding:8px}.nav-tx b{font-size:15px}.nav-tx small{font-size:11px}}
 .rule{background:color-mix(in srgb,var(--sun) 22%,var(--paper));border-radius:16px;padding:12px 16px;font-weight:700;max-width:560px;text-align:left}
 .topic.pattern .pic{font-size:30px}
+.topic.sents-card{border-color:color-mix(in srgb,var(--sky) 40%,var(--line))}
+.topic.sents-card small:first-of-type{font-style:italic}
 .scene{position:relative;width:240px;height:170px;max-width:100%;flex:none}
 .scene .ground{position:absolute;left:10px;right:10px;top:146px;height:4px;border-radius:2px;background:var(--line)}
 .scene .box-back{position:absolute;left:75px;top:76px;width:90px;height:70px;border-radius:6px 6px 4px 4px;background:#A86F3D;z-index:1}
@@ -691,10 +693,10 @@ function home(){
   $("cur").onclick=()=>unitMenu(cur);
   $("parent").onclick=parent; $("parent2").onclick=parent;
 }
-function topicCard(t,cls="",{items=itemsOf(t),label,kind}={}){
+function topicCard(t,cls="",{items=itemsOf(t),label,kind,pic,title,sub}={}){
   const m=items.filter(w=>(S.words[w.key]?.box||0)>=MASTER_BOX).length, n=items.length, done=n&&m===n;
   const unitWord=label||(t.kind==="abc"?"chữ":t.kind==="unit"?"từ & câu":"từ");
-  return `<button class="topic ${cls}" data-t="${t.id}"${kind?` data-k="${kind}"`:""}>${cls.includes("current")?`<span class="now">Tuần này</span>`:""}<span class="pic">${esc(t.pic)}</span><b>${esc(t.en)}</b><small>${esc(t.name)}</small>
+  return `<button class="topic ${cls}" data-t="${t.id}"${kind?` data-k="${kind}"`:""}>${cls.includes("current")?`<span class="now">Tuần này</span>`:""}<span class="pic">${esc(pic||t.pic)}</span><b>${esc(title||t.en)}</b><small>${esc(sub||t.name)}</small>
     ${n?`<div class="mini"><i style="width:${Math.round(m/n*100)}%"></i></div><small class="${done?"badge-done":""}">${done?"🏅 Đã thuộc hết":`${m}/${n} ${unitWord}`}</small>`
        :`<small>Bố mẹ thêm từ ở Góc bố mẹ</small>`}</button>`;
 }
@@ -734,7 +736,7 @@ function phase2Html(){
   <h2 class="section-title">👀 Sight words & ❓ Từ để hỏi <span>${SIGHT_SETS.reduce((a,t)=>a+mastered(t),0)}/${SIGHT_SETS.reduce((a,t)=>a+t.list.length,0)} sight words đã thuộc</span></h2>
   <div class="topics">${SIGHT_SETS.map(t=>topicCard(t,"sight")).join("")}${topicCard(QW,"qword",{label:"câu"})}</div>
   <h2 class="section-title">💬 Mẫu câu & xếp câu <span>theo Unit của sách</span></h2>
-  <div class="topics units">${UNITS.map(u=>topicCard(u, u.id===S.curUnit?"current":"", {items:u.sents, label:"câu"})).join("")}</div>
+  <div class="topics units">${UNITS.map(u=>{ const x=u.sentences[0]; return topicCard(u, "sents-card"+(u.id===S.curUnit?" current":""), {items:u.sents, label:"câu", pic:"💬", title:u.en+" · Mẫu câu", sub:"“"+(x.q||x.a)+"”"}); }).join("")}</div>
   <h2 class="section-title">📖 Truyện <span>${storiesDone}/${UNITS.length} truyện đã đọc</span></h2>
   <div class="topics units">${UNITS.map(storyCard).join("")}</div>
   <h2 class="section-title">⌨️ Chính tả theo chủ đề <span>nghe rồi gõ lại từ</span></h2>
