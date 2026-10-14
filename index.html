@@ -249,6 +249,7 @@ mark{background:color-mix(in srgb,var(--sun) 55%,transparent);color:inherit;bord
 @media (max-width:760px){.nav{flex-direction:column;align-items:flex-start;padding:8px}.nav-tx b{font-size:15px}.nav-tx small{font-size:11px}}
 .rule{background:color-mix(in srgb,var(--sun) 22%,var(--paper));border-radius:16px;padding:12px 16px;font-weight:700;max-width:560px;text-align:left}
 .topic.pattern .pic{font-size:30px}
+.book-sub{font-weight:800;color:var(--muted);margin:2px 0 -6px}
 .topic.sents-card{border-color:color-mix(in srgb,var(--sky) 40%,var(--line))}
 .topic.sents-card small:first-of-type{font-style:italic}
 .scene{position:relative;width:240px;height:170px;max-width:100%;flex:none}
@@ -264,6 +265,36 @@ mark{background:color-mix(in srgb,var(--sun) 55%,transparent);color:inherit;bord
 .scene.pos-behind .critter{top:44px;font-size:42px;left:99px;z-index:0;filter:saturate(.8)}
 .scene.pos-in-front-of .critter{top:100px;font-size:58px;left:92px;z-index:5}
 .mini-scene{transform:scale(.42);transform-origin:top left;width:240px;height:170px;margin:0 -139px -99px 0}
+.vd-in{font:inherit;color:var(--ink);background:var(--tile);border:2px solid var(--line);border-radius:14px;padding:10px 12px;width:100%}
+a.btn{text-decoration:none}
+.video-box{position:relative;width:100%;max-width:760px;aspect-ratio:16/9;border-radius:18px;overflow:hidden;background:#000}
+.video-box iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.movie{position:relative;overflow:hidden;border-radius:26px;min-height:360px;display:grid;justify-items:center;align-content:center;gap:14px;padding:28px 16px 40px;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--sky) 30%,var(--paper)) 0%,var(--paper) 70%);border:2px solid var(--line);box-shadow:var(--shadow);text-align:center}
+.movie-sky{position:absolute;inset:0;pointer-events:none}
+.cloud{position:absolute;font-size:44px;opacity:.7;animation:drift 18s linear infinite}
+.cloud.c1{top:14px;left:-60px}.cloud.c2{top:60px;left:-60px;animation-delay:-9s;font-size:32px}
+.sun-deco{position:absolute;top:12px;right:18px;font-size:40px;animation:spin 20s linear infinite}
+.movie-pic{position:relative;font-size:110px;line-height:1.1;min-height:122px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.movie-pic span{display:inline-block}
+.movie-text{position:relative;font-family:var(--f-display);font-size:32px;font-weight:700;margin:0;max-width:640px}
+.mw{border-radius:10px;padding:0 4px;transition:background .15s}
+.mw.on{background:var(--sun);color:#3A2A00}
+.movie-vi{position:relative;color:var(--muted);font-weight:800;margin:0}
+.movie-dots{position:absolute;bottom:14px;left:0;right:0;display:flex;gap:6px;justify-content:center}
+.movie-dots i{width:10px;height:10px;border-radius:50%;background:var(--line)}
+.movie-dots i.on{background:var(--sky)}
+.movie-end{position:relative;display:grid;gap:12px;justify-items:center}
+.anim-pop{animation:pop .6s both}
+.anim-slide{animation:slidein .7s both}
+.anim-bounce{animation:bouncein .8s both}
+.anim-spin{animation:spinin .8s both}
+@keyframes drift{from{transform:translateX(0)}to{transform:translateX(120vw)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes slidein{from{transform:translateX(-120px);opacity:0}to{transform:none;opacity:1}}
+@keyframes bouncein{0%{transform:translateY(-140px);opacity:0}60%{transform:translateY(12px);opacity:1}80%{transform:translateY(-6px)}100%{transform:none}}
+@keyframes spinin{from{transform:rotate(-200deg) scale(.3);opacity:0}to{transform:none;opacity:1}}
+@media (max-width:520px){.movie-pic{font-size:80px;min-height:90px}.movie-text{font-size:26px}}
 .pop{animation:pop .4s}
 @keyframes pop{0%{transform:scale(.6)}70%{transform:scale(1.12)}100%{transform:scale(1)}}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
@@ -386,6 +417,197 @@ const STORIES = {
   ["🥤","I'm thirsty.","Mình khát."],["🧃🍪","Juice and cookies. Yum!","Nước ép và bánh quy. Ngon quá!"],["😀","Now I'm happy!","Giờ thì mình vui rồi!"]],
   qs:[{q:"How is he at the end?",vi:"Cuối truyện bạn ấy thấy thế nào?",opts:["😀","😢","😠"],a:0},{q:"What does he drink?",vi:"Bạn ấy uống gì?",opts:["🧃","🥛","💧"],a:0}]},
 };
+// ---------- Sách Future 2 (Workbook Part 1) ----------
+// Unit 1 lấy đúng từ trong sách (Lesson 1–2). Unit 2–8: từ và câu gợi ý theo tên bài, bố mẹ sửa trong Góc bố mẹ.
+const BOOKS=[{id:"f1",name:"Future 1",icon:"📘"},{id:"f2",name:"Future 2 – Part 1",icon:"📗"},{id:"f2b",name:"Future 2 – Part 2",icon:"📗"}];
+UNITS.forEach(u=>{ u.book="f1"; });
+UNITS.push(
+ {id:"f2u1", book:"f2", n:1, chang:1, name:"Things for School", pic:"🎒", story:"Our classroom", words:[
+  ["pen","cái bút mực","🖊️","It's a pen."],["pencil","bút chì","✏️","It's a pencil."],["ruler","thước kẻ","📏","It's a ruler."],["eraser","cục tẩy","","It's an eraser."],
+  ["bag","cái cặp","🎒","It's a bag."],["book","quyển sách","📖","It's a book."],["crayon","bút sáp màu","🖍️","It's a crayon."],["pencil case","hộp bút","👝","It's a pencil case."],
+  ["poster","tấm áp phích","🖼️","It's a poster."],["board","cái bảng","","Look at the board."],["chair","cái ghế","🪑","Sit on the chair."],["desk","cái bàn học","","It's my desk."]],
+  sentences:[{q:"What's this?",a:"It's a pen.",pic:"🖊️",vi:"Đây là cái gì? – Đó là cái bút."},{q:"What's this?",a:"It's a book.",pic:"📖",vi:"Đây là cái gì? – Đó là quyển sách."},
+   {q:"What's this?",a:"It's a crayon.",pic:"🖍️",vi:"Đây là cái gì? – Đó là bút sáp."},{q:"Is it a bag?",a:"Yes, it is.",pic:"🎒",vi:"Đó có phải cái cặp không? – Phải."},
+   {a:"This is our classroom.",pic:"🏫",vi:"Đây là lớp học của chúng mình."}]},
+ {id:"f2u2", book:"f2", n:2, chang:1, name:"Toys", pic:"🧸", story:"My new toy", words:[
+  ["ball","quả bóng","⚽","I've got a ball."],["doll","búp bê","🪆","It's a doll."],["kite","cái diều","🪁","It's a kite."],["car","ô tô","🚗","It's a red car."],
+  ["train","tàu hoả","🚆","It's a train."],["robot","rô-bốt","🤖","It's a robot."],["teddy bear","gấu bông","🧸","I love my teddy bear."],["plane","máy bay","✈️","It's a plane."],
+  ["boat","con thuyền","⛵","It's a boat."],["bike","xe đạp","🚲","It's my bike."],["puzzle","trò xếp hình","🧩","It's a puzzle."],["yo-yo","cái yo-yo","🪀","It's a yo-yo."]],
+  sentences:[{q:"What's your favourite toy?",a:"My favourite toy is a robot.",pic:"🤖",vi:"Đồ chơi bạn thích nhất là gì? – Là con rô-bốt."},
+   {a:"I've got a kite.",pic:"🪁",vi:"Mình có một cái diều."},{q:"Is it a car?",a:"No, it isn't.",pic:"🚆",vi:"Đó có phải ô tô không? – Không phải."},
+   {q:"What colour is the ball?",a:"It's red.",pic:"🔴",vi:"Quả bóng màu gì? – Màu đỏ."},{a:"The teddy bear is big.",pic:"🧸",vi:"Con gấu bông to."}]},
+ {id:"f2u3", book:"f2", n:3, chang:1, name:"People", pic:"🧑", story:"At the park", words:[
+  ["boy","bạn trai","👦","He's a boy."],["girl","bạn gái","👧","She's a girl."],["man","người đàn ông","👨","He's a man."],["woman","người phụ nữ","👩","She's a woman."],
+  ["baby","em bé","👶","It's a baby."],["teacher","giáo viên","🧑‍🏫","She's my teacher."],["doctor","bác sĩ","🧑‍⚕️","He's a doctor."],["friend","bạn","🧑‍🤝‍🧑","He's my friend."],
+  ["children","những đứa trẻ","🧒🧒","The children are happy."],["people","mọi người","👥","Look at the people."]],
+  sentences:[{q:"Who's he?",a:"He's my friend.",pic:"👦",vi:"Bạn ấy là ai? – Bạn ấy là bạn của mình."},{q:"Who's she?",a:"She's a doctor.",pic:"👩‍⚕️",vi:"Cô ấy là ai? – Cô ấy là bác sĩ."},
+   {a:"He's a man.",pic:"👨",vi:"Đó là một người đàn ông."},{a:"She's a baby.",pic:"👶",vi:"Đó là một em bé."},{q:"Is he a teacher?",a:"Yes, he is.",pic:"👨‍🏫",vi:"Chú ấy là giáo viên phải không? – Phải."}]},
+ {id:"f2u4", book:"f2", n:4, chang:1, name:"My Family", pic:"👨‍👩‍👧‍👦", story:"Family photo", words:[
+  ["mother","mẹ","👩","This is my mother."],["father","bố","👨","This is my father."],["brother","anh / em trai","👦","He's my brother."],["sister","chị / em gái","👧","She's my sister."],
+  ["grandmother","bà","👵","This is my grandmother."],["grandfather","ông","👴","This is my grandfather."],["baby","em bé","👶","The baby is small."],["family","gia đình","👨‍👩‍👧‍👦","I love my family."],
+  ["photo","bức ảnh","📷","Look at my photo."],["me","mình","🙋","This is me!"]],
+  sentences:[{q:"Who's this?",a:"This is my mother.",pic:"👩",vi:"Đây là ai? – Đây là mẹ mình."},{q:"Who's he?",a:"He's my brother.",pic:"👦",vi:"Bạn ấy là ai? – Đó là anh/em trai mình."},
+   {a:"I love my family.",pic:"👨‍👩‍👧‍👦",vi:"Mình yêu gia đình mình."},{q:"How many people are in your family?",a:"Four people.",pic:"👨‍👩‍👧‍👦",vi:"Nhà bạn có mấy người? – Bốn người."},
+   {a:"My grandfather is old.",pic:"👴",vi:"Ông của mình đã già."}]},
+ {id:"f2u5", book:"f2", n:5, chang:2, name:"My Body", pic:"🙋", story:"My monster friend", words:[
+  ["head","cái đầu","👤","Touch your head."],["eyes","đôi mắt","👀","I've got two eyes."],["ears","đôi tai","👂","I've got two ears."],["nose","cái mũi","👃","Touch your nose."],
+  ["mouth","cái miệng","👄","Open your mouth."],["hair","tóc","💇","I've got long hair."],["hands","đôi bàn tay","👐","Clap your hands."],["arms","cánh tay","💪","Wave your arms."],
+  ["legs","đôi chân","🦵","Shake your legs."],["feet","bàn chân","🦶","Stamp your feet."],["teeth","răng","🦷","Brush your teeth."]],
+  sentences:[{a:"Touch your nose.",pic:"👃",vi:"Chạm vào mũi."},{a:"Clap your hands.",pic:"👏",vi:"Vỗ tay."},
+   {q:"How many eyes have you got?",a:"I've got two eyes.",pic:"👀",vi:"Bạn có mấy con mắt? – Mình có hai mắt."},{a:"Shake your legs.",pic:"🦵",vi:"Lắc chân nào."},
+   {a:"I've got long hair.",pic:"👧",vi:"Mình có tóc dài."}]},
+ {id:"f2u6", book:"f2", n:6, chang:2, name:"Homes", pic:"🏠", story:"Where's Teddy?", words:[
+  ["house","ngôi nhà","🏠","This is my house."],["flat","căn hộ","🏢","I live in a flat."],["bedroom","phòng ngủ","🛏️","This is my bedroom."],["bathroom","phòng tắm","🛁","The bath is in the bathroom."],
+  ["kitchen","nhà bếp","🍳","Mum is in the kitchen."],["living room","phòng khách","🛋️","We watch TV in the living room."],["garden","khu vườn","🌷","Dad is in the garden."],["door","cái cửa","🚪","Open the door."],
+  ["window","cửa sổ","🪟","Close the window."]],
+  sentences:[{q:"Where's Mum?",a:"She's in the kitchen.",pic:"👩🍳",vi:"Mẹ đâu rồi? – Mẹ ở trong bếp."},{q:"Where's the cat?",a:"It's in the bedroom.",pic:"🐱🛏️",vi:"Con mèo đâu? – Nó ở trong phòng ngủ."},
+   {a:"I live in a flat.",pic:"🏢",vi:"Mình sống ở căn hộ."},{a:"This is my house.",pic:"🏠",vi:"Đây là nhà của mình."},{q:"Where's Dad?",a:"He's in the garden.",pic:"👨🌷",vi:"Bố đâu rồi? – Bố ở ngoài vườn."}]},
+ {id:"f2u7", book:"f2", n:7, chang:2, name:"My Town", pic:"🏙️", story:"A day in town", words:[
+  ["park","công viên","🏞️","Let's go to the park."],["shop","cửa hàng","🏪","There is a shop."],["school","trường học","🏫","This is my school."],["hospital","bệnh viện","🏥","The doctor is at the hospital."],
+  ["zoo","sở thú","🦒","There is a zoo in my town."],["street","đường phố","🛣️","Look at the street."],["cinema","rạp chiếu phim","🎬","Let's go to the cinema."],["café","quán cà phê","☕","We are at the café."],
+  ["library","thư viện","📚","I read at the library."],["bus stop","trạm xe buýt","🚏","Wait at the bus stop."]],
+  sentences:[{q:"Where are you going?",a:"I'm going to the park.",pic:"🏞️",vi:"Bạn đang đi đâu? – Mình đi công viên."},{a:"There is a shop.",pic:"🏪",vi:"Có một cửa hàng."},
+   {q:"Is there a zoo in your town?",a:"Yes, there is.",pic:"🦒",vi:"Thị trấn của bạn có sở thú không? – Có."},{a:"The library is next to the school.",pic:"📚🏫",vi:"Thư viện ở cạnh trường học."},
+   {a:"I go to school by bus.",pic:"🚌",vi:"Mình đi học bằng xe buýt."}]},
+ {id:"f2u8", book:"f2", n:8, chang:2, name:"On the farm", pic:"🐄", story:"Farmer Joe", words:[
+  ["cow","con bò","🐄","It's a cow."],["horse","con ngựa","🐴","It's a horse."],["sheep","con cừu","🐑","It's a sheep."],["goat","con dê","🐐","It's a goat."],
+  ["duck","con vịt","🦆","It's a duck."],["chicken","con gà","🐔","It's a chicken."],["pig","con lợn","🐷","It's a pig."],["rabbit","con thỏ","🐰","It's a rabbit."],
+  ["farmer","bác nông dân","🧑‍🌾","He's a farmer."],["tractor","máy kéo","🚜","The tractor is red."]],
+  sentences:[{q:"What's this?",a:"It's a sheep.",pic:"🐑",vi:"Đây là con gì? – Đó là con cừu."},{q:"How many cows are there?",a:"There are three cows.",pic:"🐄🐄🐄",vi:"Có bao nhiêu con bò? – Có ba con bò."},
+   {a:"The farmer has got a tractor.",pic:"🧑‍🌾🚜",vi:"Bác nông dân có một cái máy kéo."},{q:"What does a duck say?",a:"Quack, quack!",pic:"🦆",vi:"Con vịt kêu thế nào? – Cạc cạc!"},
+   {q:"Is it a horse?",a:"No, it isn't. It's a goat.",pic:"🐐",vi:"Đó là con ngựa phải không? – Không, đó là con dê."}]}
+);
+Object.assign(STORIES,{
+ f2u1:{title:"Our classroom", pages:[
+  ["🏫","This is our classroom.","Đây là lớp học của chúng mình."],["🪑","Look! A chair and a desk.","Nhìn kìa! Một cái ghế và một cái bàn."],
+  ["🖼️","What's this? It's a poster.","Đây là cái gì? Đó là tấm áp phích."],["🎒","My bag is on the desk.","Cặp của mình ở trên bàn."],["👋","Hello, teacher!","Chào cô giáo!"]],
+  qs:[{q:"What is on the desk?",vi:"Cái gì ở trên bàn?",opts:["🎒","🐱","🍎"],a:0},{q:"What's this? 🖼️",vi:"Đây là cái gì?",opts:["It's a poster.","It's a pen.","It's a bag."],a:0,txt:true}]},
+ f2u2:{title:"My new toy", pages:[
+  ["🎁","Look! A present for me!","Nhìn kìa! Quà cho mình!"],["🧸","Is it a teddy bear? No!","Có phải gấu bông không? Không phải!"],
+  ["🤖","It's a robot!","Đó là một con rô-bốt!"],["🔵","My robot is blue.","Rô-bốt của mình màu xanh."],["😀","I love my new toy!","Mình rất thích đồ chơi mới!"]],
+  qs:[{q:"What is the new toy?",vi:"Đồ chơi mới là gì?",opts:["🤖","🧸","🚗"],a:0},{q:"What colour is the robot?",vi:"Rô-bốt màu gì?",opts:["🔵","🔴","🟢"],a:0}]},
+ f2u3:{title:"At the park", pages:[
+  ["🏞️","We are at the park.","Chúng mình đang ở công viên."],["👨🐶","Look! A man with a dog.","Nhìn kìa! Một chú với một con chó."],
+  ["👩👶","A woman with a baby.","Một cô với một em bé."],["👦👧⚽","A boy and a girl play ball.","Một bạn trai và một bạn gái chơi bóng."],["😀","The people are happy!","Mọi người đều vui!"]],
+  qs:[{q:"Who has got a dog?",vi:"Ai có con chó?",opts:["👨","👩","👶"],a:0},{q:"What do the children play?",vi:"Các bạn nhỏ chơi gì?",opts:["⚽","🪁","🚲"],a:0}]},
+ f2u4:{title:"Family photo", pages:[
+  ["📷","Look at my family photo.","Nhìn ảnh gia đình mình này."],["👨👩","This is my father and this is my mother.","Đây là bố mình và đây là mẹ mình."],
+  ["👧","This is my sister. She's five.","Đây là em gái mình. Em ấy năm tuổi."],["👴👵","This is my grandfather and my grandmother.","Đây là ông và bà của mình."],["❤️","I love my family!","Mình yêu gia đình mình!"]],
+  qs:[{q:"How old is the sister?",vi:"Em gái mấy tuổi?",opts:["5","3","7"],a:0,txt:true},{q:"Who is in the photo?",vi:"Ai ở trong ảnh?",opts:["👨‍👩‍👧‍👦","🐶","🚗"],a:0}]},
+ f2u5:{title:"My monster friend", pages:[
+  ["👾","This is my monster friend.","Đây là bạn quái vật của mình."],["👀👀","He's got four eyes!","Bạn ấy có bốn con mắt!"],
+  ["💪💪","He's got four arms.","Bạn ấy có bốn cánh tay."],["🦶","He's got big feet.","Bạn ấy có bàn chân to."],["😀","He's funny!","Bạn ấy thật buồn cười!"]],
+  qs:[{q:"How many eyes has he got?",vi:"Bạn ấy có mấy mắt?",opts:["4","2","3"],a:0,txt:true},{q:"Is the monster funny?",vi:"Quái vật có buồn cười không?",opts:["Yes, he is.","No, he isn't."],a:0,txt:true}]},
+ f2u6:{title:"Where's Teddy?", pages:[
+  ["🧸","Where's my teddy?","Gấu bông của mình đâu rồi?"],["🛁","Is it in the bathroom? No.","Có ở trong phòng tắm không? Không."],
+  ["🍳","Is it in the kitchen? No.","Có ở trong bếp không? Không."],["🛏️","Look! It's in the bedroom!","Nhìn kìa! Nó ở trong phòng ngủ!"],["😀","Hello, Teddy!","Chào gấu bông!"]],
+  qs:[{q:"Where is Teddy?",vi:"Gấu bông ở đâu?",opts:["🛏️","🛁","🍳"],a:0},{q:"Is Teddy in the kitchen?",vi:"Gấu bông có ở trong bếp không?",opts:["No, it isn't.","Yes, it is."],a:0,txt:true}]},
+ f2u7:{title:"A day in town", pages:[
+  ["🏙️","This is my town.","Đây là thị trấn của mình."],["🏪","We go to the shop.","Chúng mình đi cửa hàng."],
+  ["☕","We go to the café.","Chúng mình đi quán cà phê."],["🏞️","We play in the park.","Chúng mình chơi ở công viên."],["🚌","Then we go home by bus.","Rồi chúng mình về nhà bằng xe buýt."]],
+  qs:[{q:"Where do they play?",vi:"Các bạn chơi ở đâu?",opts:["🏞️","🏪","🏥"],a:0},{q:"How do they go home?",vi:"Các bạn về nhà bằng gì?",opts:["🚌","🚲","✈️"],a:0}]},
+ f2u8:{title:"Farmer Joe", pages:[
+  ["🧑‍🌾","This is Farmer Joe.","Đây là bác nông dân Joe."],["🚜","He's got a red tractor.","Bác có một cái máy kéo màu đỏ."],
+  ["🐄🐄","He's got two cows. Moo!","Bác có hai con bò. Ùm bò!"],["🐔🐔🐔","He's got three chickens. Cluck!","Bác có ba con gà. Cục tác!"],["👋","Goodbye, farm!","Tạm biệt nông trại!"]],
+  qs:[{q:"What colour is the tractor?",vi:"Máy kéo màu gì?",opts:["🔴","🔵","🟡"],a:0},{q:"How many cows has he got?",vi:"Bác có mấy con bò?",opts:["2","3","4"],a:0,txt:true}]},
+});
+// ---------- Future 2 – Part 2 (Unit 9–20) ----------
+// Unit 9 lấy đúng từ trong sách (Lesson 1–3). Unit 10–20: gợi ý theo tên bài, bố mẹ sửa trong Góc bố mẹ.
+const YN=(y,n)=>[y,n];
+[
+ {id:"f2u9", n:9, chang:3, name:"My Clothes", pic:"👕", story:"The happy scarecrow",
+  words:[["skirt","chân váy","","It's a pink skirt."],["shirt","áo sơ mi","👔","This is my shirt."],["pants","quần dài","","These are pants."],["jeans","quần bò","👖","These are my jeans."],
+   ["socks","đôi tất","🧦","These are socks."],["shoes","đôi giày","👟","Are these your shoes?"],["dress","váy liền","👗","Color Julie's dress pink."],["T-shirt","áo phông","👕","Is this your T-shirt?"],
+   ["scarecrow","bù nhìn","","Look at the scarecrow."],["boots","đôi ủng","👢","These are boots."],["gloves","đôi găng tay","🧤","These are gloves."],["happy","vui vẻ","😀","The scarecrow is happy."],["hat","cái mũ","👒","What color is his hat?"]],
+  sentences:[{a:"These are socks.",pic:"🧦",vi:"Đây là những chiếc tất."},{q:"Are these your shoes?",a:"Yes, they are.",opts:["Yes, they are.","Yes, it is.","Yes, I am."],pic:"👟",vi:"Đây có phải giày của bạn không? – Phải."},
+   {q:"Is this your T-shirt?",a:"No, it isn't.",opts:["No, it isn't.","No, they aren't.","No, I'm not."],pic:"👕",vi:"Đây có phải áo phông của bạn không? – Không phải."},
+   {q:"What color is his hat?",a:"It's brown.",pic:"👒",vi:"Mũ của bạn ấy màu gì? – Màu nâu."},{a:"Color Julie's dress pink.",pic:"👧👗",vi:"Tô váy của Julie màu hồng."}],
+  st:{pages:[["🌾","This is a scarecrow.","Đây là một chú bù nhìn."],["👒","He's got a brown hat.","Chú có một cái mũ màu nâu."],["🧤","He's got green gloves.","Chú có đôi găng tay màu xanh lá."],
+   ["👢","He's got yellow boots.","Chú có đôi ủng màu vàng."],["😀","He's a happy scarecrow!","Chú là một chú bù nhìn vui vẻ!"]],
+   qs:[{q:"What color are his boots?",vi:"Đôi ủng màu gì?",opts:["🟡","🔴","🔵"],a:0},{q:"Is the scarecrow happy?",vi:"Bù nhìn có vui không?",opts:["Yes, he is.","No, he isn't."],a:0,txt:true}]}},
+ {id:"f2u10", n:10, chang:3, name:"Eat and Drink", pic:"🍽️", story:"Breakfast time",
+  words:[["water","nước","💧","I drink water."],["milk","sữa","🥛","I drink milk."],["juice","nước ép","🧃","I like juice."],["bread","bánh mì","🍞","I eat bread."],["rice","cơm","🍚","I eat rice."],
+   ["eggs","trứng","🥚","I like eggs."],["chicken","thịt gà","🍗","I eat chicken."],["fish","cá","🐟","I like fish."],["apple","quả táo","🍎","I eat an apple."],["cake","bánh ngọt","🍰","I like cake."]],
+  sentences:[{q:"What do you drink?",a:"I drink water.",pic:"💧",vi:"Bạn uống gì? – Mình uống nước."},{q:"Do you like juice?",a:"Yes, I do.",opts:["Yes, I do.","Yes, I am.","Yes, it is."],pic:"🧃",vi:"Bạn có thích nước ép không? – Có."},
+   {a:"I eat bread for breakfast.",pic:"🍞",vi:"Mình ăn bánh mì vào bữa sáng."},{a:"I'm hungry.",pic:"🤤",vi:"Mình đói."},{a:"I'm thirsty.",pic:"🥤",vi:"Mình khát."}],
+  st:{pages:[["🌅","It's breakfast time.","Đến giờ ăn sáng rồi."],["🍞","I eat bread.","Mình ăn bánh mì."],["🥚","I eat an egg.","Mình ăn một quả trứng."],["🥛","I drink milk.","Mình uống sữa."],["😋","Yum! I'm not hungry now.","Ngon quá! Giờ mình hết đói rồi."]],
+   qs:[{q:"What does he drink?",vi:"Bạn ấy uống gì?",opts:["🥛","🧃","💧"],a:0},{q:"What does he eat?",vi:"Bạn ấy ăn gì?",opts:["🍞","🍕","🍌"],a:0}]}},
+ {id:"f2u11", n:11, chang:3, name:"Beach Vacations", pic:"🏖️", story:"At the beach",
+  words:[["beach","bãi biển","🏖️","I'm at the beach."],["sea","biển","🌊","I swim in the sea."],["sun","mặt trời","☀️","The sun is hot."],["shell","vỏ sò","🐚","Look! A shell!"],["crab","con cua","🦀","Look! A crab!"],
+   ["boat","con thuyền","⛵","The boat is on the sea."],["swim","bơi","🏊","I can swim."],["sunglasses","kính râm","🕶️","I'm wearing sunglasses."],["ice cream","kem","🍦","I like ice cream."],["sandcastle","lâu đài cát","🏰","I make a sandcastle."]],
+  sentences:[{q:"Where are you?",a:"I'm at the beach.",pic:"🏖️",vi:"Bạn đang ở đâu? – Mình ở bãi biển."},{a:"I'm swimming in the sea.",pic:"🏊",vi:"Mình đang bơi ở biển."},
+   {a:"Look! A crab!",pic:"🦀",vi:"Nhìn kìa! Một con cua!"},{q:"What are you wearing?",a:"I'm wearing sunglasses.",pic:"🕶️",vi:"Bạn đang đeo gì? – Mình đang đeo kính râm."},{a:"It's sunny.",pic:"☀️",vi:"Trời nắng."}],
+  st:{pages:[["🏖️","We are at the beach.","Chúng mình đang ở bãi biển."],["☀️","It's sunny and hot.","Trời nắng và nóng."],["🏰","I make a sandcastle.","Mình xây lâu đài cát."],["🦀","Look! A crab!","Nhìn kìa! Một con cua!"],["🍦","Then we eat ice cream.","Rồi chúng mình ăn kem."]],
+   qs:[{q:"What does he make?",vi:"Bạn ấy làm gì?",opts:["🏰","🍰","🪁"],a:0},{q:"What animal do they see?",vi:"Các bạn thấy con gì?",opts:["🦀","🐶","🐄"],a:0}]}},
+ {id:"f2u12", n:12, chang:3, name:"Free Time", pic:"🎨", story:"Saturday fun",
+  words:[["play football","đá bóng","⚽","I play football."],["ride a bike","đi xe đạp","🚴","I ride a bike."],["read","đọc sách","📚","I read books."],["draw","vẽ","🎨","I draw pictures."],["sing","hát","🎤","I sing songs."],
+   ["dance","nhảy múa","💃","I dance."],["swim","bơi","🏊","I swim."],["watch TV","xem ti vi","📺","I watch TV."],["play the piano","chơi đàn piano","🎹","I play the piano."],["fly a kite","thả diều","🪁","I fly a kite."]],
+  sentences:[{q:"What do you do in your free time?",a:"I play football.",pic:"⚽",vi:"Lúc rảnh bạn làm gì? – Mình đá bóng."},{q:"Can you ride a bike?",a:"Yes, I can.",opts:["Yes, I can.","Yes, I do.","Yes, it is."],pic:"🚴",vi:"Bạn biết đi xe đạp không? – Có."},
+   {a:"I like reading.",pic:"📚",vi:"Mình thích đọc sách."},{q:"Do you like dancing?",a:"No, I don't.",opts:["No, I don't.","No, I can't.","No, it isn't."],pic:"💃",vi:"Bạn có thích nhảy không? – Không."},{a:"She's drawing.",pic:"👧🎨",vi:"Bạn ấy đang vẽ."}],
+  st:{pages:[["📅","It's Saturday!","Hôm nay là thứ Bảy!"],["🪁","In the morning, I fly a kite.","Buổi sáng, mình thả diều."],["🚴","Then I ride my bike.","Sau đó mình đạp xe."],["📺","In the evening, I watch TV.","Buổi tối, mình xem ti vi."],["😀","I love Saturdays!","Mình rất thích thứ Bảy!"]],
+   qs:[{q:"What does he do in the morning?",vi:"Buổi sáng bạn ấy làm gì?",opts:["🪁","📺","🎹"],a:0},{q:"What does he do in the evening?",vi:"Buổi tối bạn ấy làm gì?",opts:["📺","⚽","🏊"],a:0}]}},
+ {id:"f2u13", n:13, chang:4, name:"My School", pic:"🏫", story:"My first day",
+  words:[["school","trường học","🏫","This is my school."],["classroom","lớp học","🧑‍🏫","This is my classroom."],["library","thư viện","📚","I read in the library."],["playground","sân chơi","🛝","We play in the playground."],
+   ["computer","máy tính","💻","I use the computer."],["music","âm nhạc","🎵","I like music."],["art","mỹ thuật","🎨","I like art."],["lunch","bữa trưa","🍱","It's lunch time."],["friend","bạn","🧑‍🤝‍🧑","He's my friend."]],
+  sentences:[{q:"Where's the library?",a:"It's next to the classroom.",pic:"📚",vi:"Thư viện ở đâu? – Ở cạnh lớp học."},{a:"This is my school.",pic:"🏫",vi:"Đây là trường của mình."},
+   {a:"We play in the playground.",pic:"🛝",vi:"Chúng mình chơi ở sân chơi."},{q:"What's your favorite subject?",a:"I like art.",pic:"🎨",vi:"Bạn thích môn nào? – Mình thích mỹ thuật."},{a:"It's lunch time.",pic:"🍱",vi:"Đến giờ ăn trưa rồi."}],
+  st:{pages:[["🏫","It's my first day at school.","Hôm nay là ngày đầu tiên mình đi học."],["🧑‍🏫","Hello, teacher!","Chào cô giáo!"],["👦","This is Tom. He's my new friend.","Đây là Tom. Bạn ấy là bạn mới của mình."],["🛝","We play in the playground.","Chúng mình chơi ở sân chơi."],["😀","I like my school!","Mình thích trường của mình!"]],
+   qs:[{q:"Who is Tom?",vi:"Tom là ai?",opts:["A new friend.","A teacher.","A dad."],a:0,txt:true},{q:"Where do they play?",vi:"Các bạn chơi ở đâu?",opts:["🛝","📚","🍱"],a:0}]}},
+ {id:"f2u14", n:14, chang:4, name:"Playing", pic:"🤸", story:"Playtime",
+  words:[["ball","quả bóng","⚽","Throw the ball!"],["run","chạy","🏃","I can run."],["jump","nhảy","🤸","I can jump."],["throw","ném","🤾","Throw the ball!"],["catch","bắt","🧤","Catch the ball!"],
+   ["kick","đá","🦵","Kick the ball!"],["hide","trốn","🙈","Let's hide!"],["slide","cầu trượt","🛝","I go down the slide."],["climb","leo","🧗","I can climb."],["play","chơi","🎲","Let's play!"]],
+  sentences:[{a:"Let's play hide and seek!",pic:"🙈",vi:"Cùng chơi trốn tìm nào!"},{a:"Throw the ball!",pic:"🤾",vi:"Ném bóng đi!"},{a:"Catch the ball!",pic:"🧤",vi:"Bắt bóng nào!"},
+   {q:"Can you jump?",a:"Yes, I can.",opts:["Yes, I can.","Yes, I am.","Yes, it is."],pic:"🤸",vi:"Bạn nhảy được không? – Được."},{a:"I'm running.",pic:"🏃",vi:"Mình đang chạy."}],
+  st:{pages:[["🔔","It's playtime!","Đến giờ ra chơi rồi!"],["🏃","We run and jump.","Chúng mình chạy và nhảy."],["🤾","Tom throws the ball.","Tom ném bóng."],["🧤","I catch the ball!","Mình bắt được bóng!"],["🙈","Now let's play hide and seek!","Giờ cùng chơi trốn tìm nào!"]],
+   qs:[{q:"Who throws the ball?",vi:"Ai ném bóng?",opts:["Tom","Anna","Max"],a:0,txt:true},{q:"What game do they play next?",vi:"Sau đó các bạn chơi gì?",opts:["🙈","⚽","🎹"],a:0}]}},
+ {id:"f2u15", n:15, chang:4, name:"Job", pic:"🧑‍⚕️", story:"When I grow up",
+  words:[["doctor","bác sĩ","🧑‍⚕️","He's a doctor."],["teacher","giáo viên","🧑‍🏫","She's a teacher."],["farmer","nông dân","🧑‍🌾","He's a farmer."],["cook","đầu bếp","🧑‍🍳","He's a cook."],["police officer","cảnh sát","👮","She's a police officer."],
+   ["firefighter","lính cứu hoả","🧑‍🚒","He's a firefighter."],["pilot","phi công","🧑‍✈️","She's a pilot."],["singer","ca sĩ","🧑‍🎤","She's a singer."],["driver","tài xế","🚕","He's a driver."]],
+  sentences:[{q:"What does he do?",a:"He's a doctor.",pic:"👨‍⚕️",vi:"Chú ấy làm nghề gì? – Chú ấy là bác sĩ."},{q:"What does she do?",a:"She's a pilot.",pic:"👩‍✈️",vi:"Cô ấy làm nghề gì? – Cô ấy là phi công."},
+   {q:"What do you want to be?",a:"I want to be a firefighter.",pic:"🧑‍🚒",vi:"Bạn muốn làm nghề gì? – Mình muốn làm lính cứu hoả."},{a:"My mother is a teacher.",pic:"👩‍🏫",vi:"Mẹ mình là giáo viên."},
+   {q:"Is he a cook?",a:"Yes, he is.",opts:["Yes, he is.","Yes, she is.","Yes, I am."],pic:"👨‍🍳",vi:"Chú ấy là đầu bếp phải không? – Phải."}],
+  st:{pages:[["👦","When I grow up…","Khi mình lớn lên…"],["🧑‍✈️","Maybe I'm a pilot.","Có thể mình sẽ là phi công."],["🧑‍🚒","Maybe I'm a firefighter.","Có thể mình sẽ là lính cứu hoả."],["🧑‍🍳","Maybe I'm a cook.","Có thể mình sẽ là đầu bếp."],["😀","What do you want to be?","Còn bạn muốn làm nghề gì?"]],
+   qs:[{q:"Which job flies a plane?",vi:"Nghề nào lái máy bay?",opts:["🧑‍✈️","🧑‍🍳","🧑‍🌾"],a:0},{q:"Which job cooks food?",vi:"Nghề nào nấu ăn?",opts:["🧑‍🍳","🧑‍🚒","👮"],a:0}]}},
+ {id:"f2u16", n:16, chang:4, name:"Zoo", pic:"🦁", story:"A day at the zoo",
+  words:[["lion","sư tử","🦁","I like lions."],["tiger","con hổ","🐯","The tiger is orange."],["elephant","con voi","🐘","The elephant is big."],["giraffe","hươu cao cổ","🦒","It's a giraffe."],["monkey","con khỉ","🐵","The monkey is funny."],
+   ["zebra","ngựa vằn","🦓","The zebra is black and white."],["bear","con gấu","🐻","The bear is brown."],["snake","con rắn","🐍","The snake is long."],["crocodile","cá sấu","🐊","The crocodile is green."],["penguin","chim cánh cụt","🐧","The penguin can swim."]],
+  sentences:[{q:"What's that?",a:"It's a giraffe.",pic:"🦒",vi:"Kia là con gì? – Đó là con hươu cao cổ."},{a:"The elephant is big.",pic:"🐘",vi:"Con voi to."},
+   {a:"The giraffe has got a long neck.",pic:"🦒",vi:"Hươu cao cổ có cái cổ dài."},{q:"Can a monkey climb?",a:"Yes, it can.",opts:["Yes, it can.","No, it can't."],pic:"🐵",vi:"Khỉ có leo được không? – Có."},{a:"I like lions.",pic:"🦁",vi:"Mình thích sư tử."}],
+  st:{pages:[["🦁","We are at the zoo.","Chúng mình đang ở sở thú."],["🐘","Look! A big elephant.","Nhìn kìa! Một con voi to."],["🦒","The giraffe has got a long neck.","Hươu cao cổ có cái cổ dài."],["🐵","The monkey is funny.","Chú khỉ thật buồn cười."],["🐧","I like the penguins best!","Mình thích chim cánh cụt nhất!"]],
+   qs:[{q:"Which animal has got a long neck?",vi:"Con nào có cổ dài?",opts:["🦒","🐘","🐵"],a:0},{q:"Which animal does he like best?",vi:"Bạn ấy thích con nào nhất?",opts:["🐧","🐍","🐊"],a:0}]}},
+ {id:"f2u17", n:17, chang:4, name:"My Neighborhood", pic:"🏘️", story:"My street",
+  words:[["house","ngôi nhà","🏠","I live in a house."],["street","con phố","🛣️","I live on Park Street."],["park","công viên","🏞️","There is a park."],["shop","cửa hàng","🏪","The shop is big."],["hospital","bệnh viện","🏥","The hospital is near my house."],
+   ["bank","ngân hàng","🏦","The bank is next to the shop."],["post office","bưu điện","🏤","Where's the post office?"],["restaurant","nhà hàng","🍽️","We eat at the restaurant."],["supermarket","siêu thị","🛒","There is a supermarket."],["bus stop","trạm xe buýt","🚏","The bus stop is here."]],
+  sentences:[{q:"Is there a park near your house?",a:"Yes, there is.",opts:["Yes, there is.","Yes, there are.","Yes, it is."],pic:"🏞️",vi:"Gần nhà bạn có công viên không? – Có."},
+   {a:"The bank is next to the shop.",pic:"🏦",vi:"Ngân hàng ở cạnh cửa hàng."},{q:"Where's the hospital?",a:"It's on Green Street.",pic:"🏥",vi:"Bệnh viện ở đâu? – Ở phố Green."},
+   {a:"I live on Park Street.",pic:"🏠",vi:"Mình sống ở phố Park."},{a:"There is a supermarket.",pic:"🛒",vi:"Có một siêu thị."}],
+  st:{pages:[["🏘️","This is my street.","Đây là con phố của mình."],["🏠","My house is blue.","Nhà mình màu xanh."],["🏪","There is a shop next to my house.","Cạnh nhà mình có một cửa hàng."],["🏞️","There is a park, too.","Còn có cả công viên nữa."],["😀","I like my neighborhood!","Mình thích khu phố của mình!"]],
+   qs:[{q:"What color is the house?",vi:"Ngôi nhà màu gì?",opts:["🔵","🔴","🟡"],a:0},{q:"What is next to the house?",vi:"Cạnh nhà có gì?",opts:["🏪","🏥","🏦"],a:0}]}},
+ {id:"f2u18", n:18, chang:4, name:"Dress up", pic:"🎭", story:"The dress-up party",
+  words:[["princess","công chúa","👸","She's a princess."],["prince","hoàng tử","🤴","He's a prince."],["pirate","cướp biển","🏴‍☠️","I'm a pirate!"],["superhero","siêu anh hùng","🦸","He's a superhero."],["witch","phù thuỷ","🧙","She's a witch."],
+   ["crown","vương miện","👑","She's wearing a crown."],["wand","đũa phép","🪄","I've got a wand."],["mask","mặt nạ","🎭","I'm wearing a mask."],["clown","chú hề","🤡","The clown is funny."],["party","bữa tiệc","🎉","Let's go to the party!"]],
+  sentences:[{q:"Who are you?",a:"I'm a pirate!",pic:"🏴‍☠️",vi:"Bạn là ai? – Mình là cướp biển!"},{a:"She's a princess.",pic:"👸",vi:"Bạn ấy là công chúa."},
+   {a:"He's wearing a crown.",pic:"🤴",vi:"Bạn ấy đang đội vương miện."},{q:"Are you a superhero?",a:"Yes, I am.",opts:["Yes, I am.","Yes, it is.","Yes, they are."],pic:"🦸",vi:"Bạn là siêu anh hùng à? – Đúng vậy."},{a:"Let's dress up!",pic:"🎭",vi:"Cùng hoá trang nào!"}],
+  st:{pages:[["🎉","It's a dress-up party!","Đây là bữa tiệc hoá trang!"],["👸","Anna is a princess.","Anna là công chúa."],["🏴‍☠️","Tom is a pirate.","Tom là cướp biển."],["🦸","I'm a superhero!","Mình là siêu anh hùng!"],["😀","We dance and sing.","Chúng mình nhảy múa và ca hát."]],
+   qs:[{q:"Who is a princess?",vi:"Ai là công chúa?",opts:["Anna","Tom","Max"],a:0,txt:true},{q:"What is Tom?",vi:"Tom hoá trang thành gì?",opts:["🏴‍☠️","👸","🤡"],a:0}]}},
+ {id:"f2u19", n:19, chang:4, name:"Food", pic:"🍕", story:"Pizza night",
+  words:[["pizza","bánh pizza","🍕","I like pizza."],["hamburger","bánh hamburger","🍔","I eat a hamburger."],["sandwich","bánh sandwich","🥪","I've got a sandwich."],["noodles","mì","🍜","I like noodles."],["soup","súp","🍲","The soup is hot."],
+   ["salad","rau trộn","🥗","I eat salad."],["chicken","thịt gà","🍗","I like chicken."],["carrots","cà rốt","🥕","I don't like carrots."],["tomatoes","cà chua","🍅","Tomatoes are red."],["cookies","bánh quy","🍪","The cookies are yummy!"]],
+  sentences:[{q:"What's your favorite food?",a:"My favorite food is pizza.",pic:"🍕",vi:"Món ăn bạn thích nhất là gì? – Là pizza."},{q:"Do you like noodles?",a:"Yes, I do.",opts:["Yes, I do.","Yes, I am.","Yes, it is."],pic:"🍜",vi:"Bạn có thích mì không? – Có."},
+   {a:"I don't like carrots.",pic:"🥕",vi:"Mình không thích cà rốt."},{q:"Would you like some soup?",a:"Yes, please.",opts:["Yes, please.","Yes, I am.","Yes, it is."],pic:"🍲",vi:"Bạn có muốn ăn súp không? – Có, cảm ơn."},{a:"The cookies are yummy!",pic:"🍪",vi:"Bánh quy ngon quá!"}],
+  st:{pages:[["🍕","It's pizza night!","Tối nay ăn pizza!"],["👩","Mum makes a pizza.","Mẹ làm bánh pizza."],["🍅","We put tomatoes on it.","Chúng mình cho cà chua lên bánh."],["🧀","And cheese, too!","Và cả phô mai nữa!"],["😋","Yummy! I love pizza!","Ngon quá! Mình thích pizza!"]],
+   qs:[{q:"Who makes the pizza?",vi:"Ai làm bánh pizza?",opts:["Mum","Dad","Tom"],a:0,txt:true},{q:"What do they put on the pizza?",vi:"Các bạn cho gì lên bánh?",opts:["🍅","🍌","🍪"],a:0}]}},
+ {id:"f2u20", n:20, chang:4, name:"Music", pic:"🎵", story:"The school concert",
+  words:[["guitar","đàn ghi-ta","🎸","I play the guitar."],["piano","đàn piano","🎹","She plays the piano."],["drum","cái trống","🥁","I play the drum."],["violin","đàn vi-ô-lông","🎻","He plays the violin."],["trumpet","kèn trumpet","🎺","He plays the trumpet."],
+   ["saxophone","kèn saxophone","🎷","She plays the saxophone."],["song","bài hát","🎵","Let's sing a song."],["sing","hát","🎤","I can sing."],["dance","nhảy múa","💃","Let's dance!"],["music","âm nhạc","🎶","I like music."]],
+  sentences:[{q:"Can you play the guitar?",a:"Yes, I can.",opts:["Yes, I can.","Yes, I do.","Yes, it is."],pic:"🎸",vi:"Bạn chơi được ghi-ta không? – Được."},{a:"I play the drum.",pic:"🥁",vi:"Mình chơi trống."},
+   {a:"She sings a song.",pic:"👩‍🎤",vi:"Bạn ấy hát một bài hát."},{q:"Do you like music?",a:"Yes, I do.",opts:["Yes, I do.","Yes, I can.","Yes, I am."],pic:"🎶",vi:"Bạn có thích âm nhạc không? – Có."},{a:"Let's dance!",pic:"💃",vi:"Cùng nhảy nào!"}],
+  st:{pages:[["🎶","It's the school concert!","Hôm nay là buổi hoà nhạc của trường!"],["🎹","Anna plays the piano.","Anna chơi đàn piano."],["🥁","Tom plays the drum.","Tom chơi trống."],["🎤","I sing a song.","Mình hát một bài."],["👏","Everybody claps. Hooray!","Mọi người vỗ tay. Hoan hô!"]],
+   qs:[{q:"What does Tom play?",vi:"Tom chơi nhạc cụ gì?",opts:["🥁","🎹","🎸"],a:0},{q:"Who plays the piano?",vi:"Ai chơi đàn piano?",opts:["Anna","Tom","Mum"],a:0,txt:true}]}},
+].forEach(x=>{ const {st,...u}=x; u.book="f2b"; UNITS.push(u); STORIES[u.id]={title:u.story, ...st}; });
+const bookOf=u=>BOOKS.find(b=>b.id===u.book)||BOOKS[0];
+const unitLabel=u=>`${bookOf(u).name} · ${u.en}`;
+
 const unitDefault=u=>u.words.map(([en,vi,pic,ex])=>({en,vi,pic,ex:ex||""}));
 
 // Sight words – 40 từ Dolch Pre-primer, chia 4 bộ: [từ, nghĩa, câu ví dụ, hình cho câu]
@@ -527,7 +749,7 @@ const EMOJI_HINT = {sun:"☀️",moon:"🌙",star:"⭐",tree:"🌳",flower:"🌸
 const today = () => new Date().toLocaleDateString("en-CA");
 const addDays = (d,n) => { const x=new Date(d+"T00:00:00"); x.setDate(x.getDate()+n); return x.toLocaleDateString("en-CA"); };
 let S = {stars:0, words:{}, day:"", doneToday:0, streak:0, lastDay:"", updated:0, custom:[], unitWords:{}, curUnit:"u1"};
-function fixState(){ if(!Array.isArray(S.custom)) S.custom=[]; if(!S.unitWords||typeof S.unitWords!=="object") S.unitWords={}; if(!UNITS.some(u=>u.id===S.curUnit)) S.curUnit="u1"; if(!S.storyBest||typeof S.storyBest!=="object") S.storyBest={}; }
+function fixState(){ if(!Array.isArray(S.custom)) S.custom=[]; if(!S.unitWords||typeof S.unitWords!=="object") S.unitWords={}; if(!UNITS.some(u=>u.id===S.curUnit)) S.curUnit="u1"; if(!S.storyBest||typeof S.storyBest!=="object") S.storyBest={}; if(!S.videos||typeof S.videos!=="object") S.videos={}; }
 let LS_KEY="kien-english";
 const blankState=()=>({stars:0,words:{},day:"",doneToday:0,streak:0,lastDay:"",updated:0,custom:[],unitWords:{},curUnit:"u1"});
 function loadLocal(){ try{ const s=JSON.parse(localStorage.getItem(LS_KEY)||"null"); if(s) S=Object.assign(S,s);}catch(e){} fixState(); }
@@ -667,7 +889,7 @@ function home(){
       <div class="goal">
         <div class="goal-row"><h2>${pct>=100?"Xong mục tiêu hôm nay! 🎉":"Mục tiêu hôm nay"}</h2><b>${Math.min(S.doneToday,DAILY_GOAL)}/${DAILY_GOAL} câu</b></div>
         <div class="bar"><i style="width:${pct}%"></i></div>
-        <div class="row" style="justify-content:flex-start">${due?`<button class="btn" id="review">🔁 Ôn lại ${due} từ hay quên</button>`:""}<button class="btn ${due?"ghost":""}" id="cur">📘 Học ${esc(cur.en)}: ${esc(cur.name)}</button></div>
+        <div class="row" style="justify-content:flex-start">${due?`<button class="btn" id="review">🔁 Ôn lại ${due} từ hay quên</button>`:""}<button class="btn ${due?"ghost":""}" id="cur">${bookOf(cur).icon} Học ${esc(unitLabel(cur))}: ${esc(cur.name)}</button></div>
       </div>
       ${curPhase===3?phase3Html():curPhase===2?phase2Html():phase1Html()}
       <button class="btn ghost parent-link only-narrow" id="parent2">👨‍👩‍👦 Góc bố mẹ</button>
@@ -705,14 +927,14 @@ function phase1Html(){
   const unitItems=u=>u.list;
   return `
   <div class="phase-head"><h2>🌱 Giai đoạn 1 · Từ vựng và phát âm</h2><p class="hint">Học thẻ, nghe & chọn, ghép chữ, luyện nói, và phonics (đánh vần).</p></div>
-  <h2 class="section-title">📘 Future 1 <span>sách ở trung tâm</span></h2>
-  <div class="topics units">${UNITS.map(u=>topicCard(u, u.id===S.curUnit?"current":"", {items:unitItems(u), label:"từ"})).join("")}</div>
+  ${BOOKS.map(b=>`<h2 class="section-title">${b.icon} ${b.name} <span>sách ở trung tâm</span></h2>
+  <div class="topics units">${UNITS.filter(u=>u.book===b.id).map(u=>topicCard(u, u.id===S.curUnit?"current":"", {items:unitItems(u), label:"từ"})).join("")}</div>`).join("")}
   <h2 class="section-title">Phonics · Đánh vần <span>học âm trước, đọc từ sau</span></h2>
   <div class="topics wide">${topicCard(ABC,"phonics")}${topicCard(BLEND,"phonics")}</div>
   <h2 class="section-title">Chủ đề <span>${learnable.reduce((a,t)=>a+mastered(t),0)}/${learnable.reduce((a,t)=>a+t.list.length,0)} từ đã thuộc</span></h2>
   <div class="topics">${TOPICS.map(t=>topicCard(t)).join("")}${topicCard(MINE,"mine")}</div>
   <h2 class="section-title">Huy hiệu</h2>
-  <div class="badges">${[...UNITS,ABC,BLEND,...TOPICS].map(t=>{const on=mastered(t)===itemsOf(t).length; return `<span class="medal ${on?"on":""}">${on?"🏅":"○"} ${esc(t.en)}</span>`}).join("")}
+  <div class="badges">${[...UNITS,ABC,BLEND,...TOPICS].map(t=>{const on=mastered(t)===itemsOf(t).length; return `<span class="medal ${on?"on":""}">${on?"🏅":"○"} ${esc(t.kind==="unit"?unitLabel(t):t.en)}</span>`}).join("")}
     <span class="medal ${S.streak>=7?"on":""}">${S.streak>=7?"🔥":"○"} 7 ngày liền</span>
     <span class="medal ${S.stars>=100?"on":""}">${S.stars>=100?"🌟":"○"} 100 sao</span></div>`;
 }
@@ -728,17 +950,17 @@ function phase3Html(){
 }
 function phase2Html(){
   const storyCard=u=>{ const st=STORIES[u.id], best=S.storyBest[u.id]||0; return `
-    <button class="topic story-card" data-t="${u.id}" data-k="story"><span class="pic">${esc(st.pages[0][0])}</span><b>${esc(st.title)}</b><small>${esc(u.en)} · ${esc(u.name)}</small>
+    <button class="topic story-card" data-t="${u.id}" data-k="story"><span class="pic">${esc(st.pages[0][0])}</span><b>${esc(st.title)}</b><small>${esc(unitLabel(u))} · ${esc(u.name)}</small>
       <small class="${best===3?"badge-done":""}">${best?"⭐".repeat(best)+"☆".repeat(3-best):"Chưa đọc"}</small></button>`; };
   const storiesDone=UNITS.filter(u=>(S.storyBest[u.id]||0)>0).length;
   return `
   <div class="phase-head"><h2>🚀 Giai đoạn 2 · Câu, truyện và chính tả</h2><p class="hint">Học sight words và từ để hỏi để ghép câu, rồi luyện mẫu câu, đọc truyện và gõ chính tả theo từng Unit.</p></div>
   <h2 class="section-title">👀 Sight words & ❓ Từ để hỏi <span>${SIGHT_SETS.reduce((a,t)=>a+mastered(t),0)}/${SIGHT_SETS.reduce((a,t)=>a+t.list.length,0)} sight words đã thuộc</span></h2>
   <div class="topics">${SIGHT_SETS.map(t=>topicCard(t,"sight")).join("")}${topicCard(QW,"qword",{label:"câu"})}</div>
-  <h2 class="section-title">💬 Mẫu câu & xếp câu <span>theo Unit của sách</span></h2>
-  <div class="topics units">${UNITS.map(u=>{ const x=u.sentences[0]; return topicCard(u, "sents-card"+(u.id===S.curUnit?" current":""), {items:u.sents, label:"câu", pic:"💬", title:u.en+" · Mẫu câu", sub:"“"+(x.q||x.a)+"”"}); }).join("")}</div>
+  ${BOOKS.map(b=>`<h2 class="section-title">💬 Mẫu câu & xếp câu · ${b.name} <span>theo Unit của sách</span></h2>
+  <div class="topics units">${UNITS.filter(u=>u.book===b.id).map(u=>{ const x=u.sentences[0]; return topicCard(u, "sents-card"+(u.id===S.curUnit?" current":""), {items:u.sents, label:"câu", pic:"💬", title:u.en+" · Mẫu câu", sub:"“"+(x.q||x.a)+"”"}); }).join("")}</div>`).join("")}
   <h2 class="section-title">📖 Truyện <span>${storiesDone}/${UNITS.length} truyện đã đọc</span></h2>
-  <div class="topics units">${UNITS.map(storyCard).join("")}</div>
+  ${BOOKS.map(b=>`<p class="book-sub">${b.icon} ${b.name}</p><div class="topics units">${UNITS.filter(u=>u.book===b.id).map(storyCard).join("")}</div>`).join("")}
   <h2 class="section-title">⌨️ Chính tả theo chủ đề <span>nghe rồi gõ lại từ</span></h2>
   <div class="topics">${TOPICS.map(t=>topicCard(t,"",{kind:"dict"})).join("")}${MINE.list.length?topicCard(MINE,"mine",{kind:"dict"}):""}</div>`;
 }
@@ -893,10 +1115,11 @@ function unitMenu(u, phase=(curPhase===2?2:1)){
   const best=S.storyBest[u.id]||0;
   const modes = phase===2
     ? M("sents","💬","Mẫu câu","Nghe hỏi – đáp của bài")+M("sentence","🧱","Xếp câu","Xếp từ thành câu đúng")
-      +M("dictate","⌨️","Chính tả","Nghe rồi gõ lại từ")+M("story","📖","Truyện",`${esc(STORIES[u.id].title)} ${best?"⭐".repeat(best):""}`)
+      +M("dictate","⌨️","Chính tả","Nghe rồi gõ lại từ")+M("story","📖","Truyện",`${esc(STORIES[u.id].title)} ${best?"⭐".repeat(best):""}`)+M("movie","🎞️","Phim truyện","Truyện tự chạy như phim")
     : M("cards","🃏","Học thẻ","Từ vựng của bài")+M("listen","👂","Nghe & chọn","Nghe rồi chọn hình đúng")
-      +M("spell","🔤","Ghép chữ","Xếp chữ cái thành từ")+M("speak","🎤","Luyện nói","Đọc to từ tiếng Anh");
-  $app.innerHTML=`${head(u.en+" · "+u.name)}
+      +M("spell","🔤","Ghép chữ","Xếp chữ cái thành từ")+M("speak","🎤","Luyện nói","Đọc to từ tiếng Anh")
+      +M("video","🎬","Xem video",`${(S.videos[u.id]||[]).length||"Chưa có"} video bố mẹ chọn`);
+  $app.innerHTML=`${head(unitLabel(u)+" · "+u.name)}
   <div class="phase-tabs" role="tablist">
     <button class="ptab ${phase===1?"on":""}" data-p="1" role="tab" aria-selected="${phase===1}">🌱 Giai đoạn 1 · Từ vựng</button>
     <button class="ptab ${phase===2?"on":""}" data-p="2" role="tab" aria-selected="${phase===2}">🚀 Giai đoạn 2 · Câu & truyện</button>
@@ -915,6 +1138,8 @@ function unitMenu(u, phase=(curPhase===2?2:1)){
     if(m==="sents") return sentCards(u,0);
     if(m==="sentence") return runQuiz(shuffle(u.sents).map(w=>({w,mode:"sentence"})), ()=>unitMenu(u), u);
     if(m==="story") return storyRead(u,0);
+    if(m==="movie") return storyMovie(u);
+    if(m==="video") return videoScreen(u);
     runQuiz(pickFor(m,u.list).map(w=>({w,mode:m})), ()=>unitMenu(u), u);
   });
 }
@@ -1243,6 +1468,94 @@ function patternCards(pt){
   $app.querySelectorAll(".qa-item").forEach(b=>b.onclick=()=>{ const x=pt.sents[+b.dataset.k]; sayPaced([x.q?[x.q.replace("…","").trim(),"en"]:null,[x.en,"en"]].filter(Boolean),{gap:800}); });
   $("next").onclick=()=>runQuiz(pickSession(pt.sents,8).map(w=>({w,mode:"qa"})), ()=>patternMenu(pt), pt);
 }
+// ---------- Video YouTube do bố mẹ chọn ----------
+function ytId(url){
+  const m=String(url||"").trim().match(/(?:youtube\.com\/(?:watch\?(?:.*&)?v=|shorts\/|embed\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+  return m?m[1]:(/^[A-Za-z0-9_-]{11}$/.test(String(url||"").trim())?String(url).trim():null);
+}
+const ytSearch=u=>"https://www.youtube.com/results?search_query="+encodeURIComponent(`${u.name} English song for kids`);
+function videoScreen(u,i=0){
+  const list=S.videos[u.id]||[];
+  if(!list.length){
+    $app.innerHTML=`${head(unitLabel(u)+" · Video")}
+    <div class="stage">
+      <div class="big-pic">🎬</div>
+      <h2>Bài này chưa có video</h2>
+      <p class="hint">Bố mẹ vào Góc bố mẹ, mục "Video cho từng Unit", dán link YouTube của bài hát hoặc video phù hợp. Gợi ý tìm: <b>${esc(u.name)} English song for kids</b>.</p>
+      <div class="row"><a class="btn ghost" href="${ytSearch(u)}" target="_blank" rel="noopener">🔎 Tìm trên YouTube</a><button class="btn go" id="to-parent">👨‍👩‍👦 Góc bố mẹ</button></div>
+    </div>`;
+    bindBack(()=>unitMenu(u,1)); $("to-parent").onclick=()=>parent(u.id);
+    return;
+  }
+  const v=list[i];
+  $app.innerHTML=`${head(unitLabel(u)+" · Video")}
+  <div class="stage">
+    <p class="prompt">🎬 ${esc(v.title||"Video "+(i+1))}</p>
+    <div class="video-box"><iframe src="https://www.youtube-nocookie.com/embed/${v.id}?rel=0&modestbranding=1&playsinline=1" title="${esc(v.title||"Video")}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>
+    ${list.length>1?`<div class="row">${list.map((x,k)=>`<button class="btn ${k===i?"":"ghost"} vid-pick" data-k="${k}">${k+1}. ${esc(x.title||"Video "+(k+1))}</button>`).join("")}</div>`:""}
+    <p class="hint">Xem xong, bé quay lại học từ của bài nhé. Thời gian xem video được tính vào giờ học.</p>
+    <div class="row"><button class="btn go" id="vid-learn">🃏 Học từ của bài</button></div>
+  </div>`;
+  bindBack(()=>unitMenu(u,1));
+  $app.querySelectorAll(".vid-pick").forEach(b=>b.onclick=()=>videoScreen(u,+b.dataset.k));
+  $("vid-learn").onclick=()=>cards(u,u.list,0);
+}
+
+// ---------- Phim truyện: truyện tự chạy, hình động, chữ sáng theo giọng đọc ----------
+const graphemes=t=>{ try{ return [...new Intl.Segmenter(undefined,{granularity:"grapheme"}).segment(t)].map(x=>x.segment); }catch(e){ return Array.from(t); } };
+function storyMovie(u){
+  const st=STORIES[u.id]; const sid=++quizSeq; let i=0, paused=false, timer=null;
+  $app.innerHTML=`${head(st.title)}
+  <div class="movie" id="movie">
+    <div class="movie-sky"><span class="cloud c1">☁️</span><span class="cloud c2">☁️</span><span class="sun-deco">${i%2?"🌤️":"☀️"}</span></div>
+    <div class="movie-pic" id="mv-pics"></div>
+    <p class="movie-text" id="mv-text"></p>
+    <p class="movie-vi" id="mv-vi" hidden></p>
+    <div class="movie-dots" id="mv-dots">${st.pages.map((_,k)=>`<i data-k="${k}"></i>`).join("")}</div>
+  </div>
+  <div class="row"><button class="say small" id="mv-prev" aria-label="Trang trước">⏮</button><button class="say" id="mv-play" aria-label="Tạm dừng">⏸</button><button class="say small" id="mv-next" aria-label="Trang sau">⏭</button><button class="btn ghost" id="mv-vi-t">Nghĩa tiếng Việt</button></div>`;
+  bindBack(()=>{ clearTimeout(timer); unitMenu(u,2); });
+  const alive=()=>sid===quizSeq;
+  const show=k=>{
+    clearTimeout(timer); stopSpeech(); if(!alive()) return;
+    i=Math.max(0,Math.min(k,st.pages.length-1));
+    const [pic,en,vi]=st.pages[i], anims=["anim-pop","anim-slide","anim-bounce","anim-spin"];
+    const a=anims[i%anims.length];
+    $("mv-pics").innerHTML=graphemes(pic).filter(g=>g.trim()).map((g,j)=>`<span class="${a}" style="animation-delay:${j*0.18}s">${esc(g)}</span>`).join("");
+    const words=en.split(" ");
+    $("mv-text").innerHTML=words.map((w,j)=>`<span class="mw" data-k="${j}">${esc(w)}</span>`).join(" ");
+    $("mv-vi").textContent=vi;
+    $app.querySelectorAll("#mv-dots i").forEach((d,j)=>d.classList.toggle("on",j<=i));
+    if(!paused) narrate();
+  };
+  const narrate=()=>{
+    const [,en]=st.pages[i], spans=[...$app.querySelectorAll(".mw")];
+    const starts=[]; let pos=0; en.split(" ").forEach(w=>{ starts.push(pos); pos+=w.length+1; });
+    const mark=k=>spans.forEach((sp,j)=>sp.classList.toggle("on",j===k));
+    stopSpeech(); const my=speechToken; let boundary=false, ended=false;
+    const t0=Date.now(), minMs=3000+en.length*70; // mỗi trang hiện ít nhất chừng này, kể cả khi máy không đọc được
+    const after=()=>{ if(ended||!alive()||paused||my!==speechToken) return; ended=true; mark(-1);
+      timer=setTimeout(()=>{ if(!alive()||paused) return; if(i<st.pages.length-1){ chime(true); show(i+1); } else theEnd(); },Math.max(1300,minMs-(Date.now()-t0))); };
+    const ut=utter(en,"en",false);
+    if(ut){ ut.onboundary=e=>{ if(my!==speechToken||(e.name&&e.name!=="word")) return; boundary=true; let k=0; for(let j=0;j<starts.length;j++) if(starts[j]<=e.charIndex) k=j; mark(k); };
+      ut.onend=after; ut.onerror=after; try{ speechSynthesis.speak(ut); }catch(e){} }
+    let k=0; const tick=()=>{ if(my!==speechToken||boundary||!alive()) return; if(k<spans.length){ mark(k); setTimeout(tick,420+spans[k++].textContent.length*35); } };
+    setTimeout(()=>{ if(!boundary) tick(); },300);
+    timer=setTimeout(after,2200+en.length*110); // dự phòng khi máy không báo đọc xong
+  };
+  const theEnd=()=>{ if(!alive()) return;
+    $("movie").innerHTML=`<div class="movie-end"><div class="big-pic anim-pop">🌟</div><h2>The End!</h2><p class="hint">Hết truyện "${esc(st.title)}" rồi. Mình trả lời câu hỏi nhé!</p>
+      <div class="row"><button class="btn ghost" id="mv-again">🔁 Xem lại</button><button class="btn go" id="mv-quiz">Trả lời câu hỏi ❓</button></div></div>`;
+    speak("The end!");
+    $("mv-again").onclick=()=>storyMovie(u);
+    $("mv-quiz").onclick=()=>runQuiz(st.qs.map((q,k)=>({w:{key:u.id+":story:"+k, topic:u, en:q.q, q:q.q, vi:q.vi, opts:q.opts, a:q.a, txt:!!q.txt, pic:q.opts[q.a]}, mode:"storyq"})), ()=>unitMenu(u,2), u);
+  };
+  $("mv-play").onclick=()=>{ paused=!paused; $("mv-play").textContent=paused?"▶":"⏸"; $("mv-play").setAttribute("aria-label",paused?"Phát":"Tạm dừng"); if(paused){ clearTimeout(timer); stopSpeech(); } else narrate(); };
+  $("mv-prev").onclick=()=>show(i-1);
+  $("mv-next").onclick=()=> i<st.pages.length-1 ? show(i+1) : theEnd();
+  $("mv-vi-t").onclick=()=>{ const v=$("mv-vi"); v.hidden=!v.hidden; $("mv-vi-t").textContent=v.hidden?"Nghĩa tiếng Việt":"Ẩn nghĩa"; };
+  setTimeout(()=>show(0),300);
+}
 function pickSession(words,n){
   // ưu tiên từ chưa thuộc
   const sorted=shuffle(words).sort((a,b)=>W(a.key).box-W(b.key).box);
@@ -1418,7 +1731,8 @@ function guessPic(en){
   const f=x=>all.find(w=>w.en===x)?.pic||EMOJI_HINT[x];
   return f(en) || f(en.replace(/(es|s)$/,"")) || "";
 }
-function parent(){
+function parent(focusUnit){
+  if(typeof focusUnit!=="string") focusUnit=null;
   const learned=[...UNITS,...TOPICS,MINE,BLEND,ABC,...SIGHT_SETS,QW,...STARTER_TOPICS,...PATTERNS].reduce((a,t)=>a+mastered(t),0);
   const hard=Object.entries(S.words).filter(([k,v])=>WORDS[k]&&v.wrong>0).sort((a,b)=>b[1].wrong-a[1].wrong).slice(0,6);
   $app.innerHTML=`${head("Góc bố mẹ")}
@@ -1439,12 +1753,26 @@ function parent(){
   <div class="panel">
     <h3>Sửa và thêm từ</h3>
     <label for="cw-target">Danh sách từ</label>
-    <select id="cw-target" class="sel"><option value="custom">⭐ My words (từ bố mẹ thêm)</option>${UNITS.map(u=>`<option value="${u.id}">📘 ${esc(u.en)}: ${esc(u.name)}</option>`).join("")}</select>
+    <select id="cw-target" class="sel"><option value="custom">⭐ My words (từ bố mẹ thêm)</option>${UNITS.map(u=>`<option value="${u.id}">${bookOf(u).icon} ${esc(unitLabel(u))}: ${esc(u.name)}</option>`).join("")}</select>
     <label for="cw-bulk">Mỗi dòng một từ: tiếng Anh – nghĩa tiếng Việt</label>
     <textarea id="cw-bulk" placeholder="sheep - con cừu&#10;rain - trời mưa&#10;happy - vui vẻ"></textarea>
     <div class="row" style="justify-content:flex-start"><button class="btn go" id="cw-add">➕ Thêm từ</button><button class="btn ghost" id="cw-reset" hidden>↺ Về danh sách gợi ý</button></div>
     <p class="hint" id="cw-msg">App tự tìm hình cho các từ quen thuộc. Từ nào chưa có hình, bố mẹ dán một emoji vào ô bên trái (hoặc để trống, app sẽ hiện chữ).</p>
     <div class="list" id="cw-list"></div>
+  </div>
+  <div class="panel" id="vd-panel">
+    <h3>🎬 Video cho từng Unit</h3>
+    <p class="hint">Bố mẹ chọn bài hát hoặc video YouTube phù hợp, dán link vào đây. Bé xem ngay trong app ở mục "Xem video" của Unit, không bị nhảy sang video khác.</p>
+    <label for="vd-target">Unit</label>
+    <select id="vd-target" class="sel">${UNITS.map(u=>`<option value="${u.id}">${bookOf(u).icon} ${esc(unitLabel(u))}: ${esc(u.name)}</option>`).join("")}</select>
+    <div class="row" style="justify-content:flex-start"><a class="btn ghost" id="vd-search" target="_blank" rel="noopener">🔎 Tìm video trên YouTube</a></div>
+    <label for="vd-url">Link YouTube</label>
+    <input type="text" id="vd-url" class="vd-in" placeholder="https://www.youtube.com/watch?v=…" autocomplete="off">
+    <label for="vd-title">Tên video (không bắt buộc)</label>
+    <input type="text" id="vd-title" class="vd-in" placeholder="ví dụ: Clothes song" maxlength="60" autocomplete="off">
+    <div class="row" style="justify-content:flex-start"><button class="btn go" id="vd-add">➕ Thêm video</button></div>
+    <p class="hint" id="vd-msg"></p>
+    <div class="list" id="vd-list"></div>
   </div>`;
   bindBack(home);
   if($("logout")) $("logout").onclick=async()=>{ $("logout").disabled=true; await cloudFlush(); fbAuth.signOut(); };
@@ -1486,8 +1814,21 @@ function parent(){
     });
     buildWords(); save(); renderList();
     $("cw-bulk").value="";
-    $("cw-msg").textContent=added?`Đã thêm ${added} từ vào ${target==="custom"?"My words":UNITS.find(x=>x.id===target).en}.`:"Chưa thêm được từ mới. Mỗi dòng ghi: từ tiếng Anh - nghĩa tiếng Việt.";
+    $("cw-msg").textContent=added?`Đã thêm ${added} từ vào ${target==="custom"?"My words":unitLabel(UNITS.find(x=>x.id===target))}.`:"Chưa thêm được từ mới. Mỗi dòng ghi: từ tiếng Anh - nghĩa tiếng Việt.";
   };
+  { let vt=focusUnit||S.curUnit; $("vd-target").value=vt;
+    const vu=()=>UNITS.find(x=>x.id===vt);
+    const vRender=()=>{ $("vd-search").href=ytSearch(vu()); const L=S.videos[vt]||[];
+      $("vd-list").innerHTML=L.length?L.map((v,k)=>`<div class="cw"><span class="emo" style="border:0;background:none">🎬</span><div class="t"><b>${esc(v.title||"Video "+(k+1))}</b><span>youtu.be/${esc(v.id)}</span></div><button class="del vd-del" data-k="${k}" aria-label="Xoá video">✕</button></div>`).join(""):`<p class="hint">Unit này chưa có video.</p>`;
+      $("vd-list").querySelectorAll(".vd-del").forEach(b=>b.onclick=()=>{ S.videos[vt].splice(+b.dataset.k,1); save(); vRender(); }); };
+    $("vd-target").onchange=()=>{ vt=$("vd-target").value; $("vd-msg").textContent=""; vRender(); };
+    $("vd-add").onclick=()=>{ const id=ytId($("vd-url").value);
+      if(!id){ $("vd-msg").textContent="Link chưa đúng. Bố mẹ mở video trên YouTube, bấm Chia sẻ → Sao chép đường liên kết, rồi dán vào đây."; return; }
+      const L=S.videos[vt]||(S.videos[vt]=[]); if(L.some(v=>v.id===id)){ $("vd-msg").textContent="Video này đã có rồi."; return; }
+      if(L.length>=6){ $("vd-msg").textContent="Mỗi Unit tối đa 6 video."; return; }
+      L.push({id,title:$("vd-title").value.trim()}); save(); $("vd-url").value=""; $("vd-title").value="";
+      $("vd-msg").textContent=`Đã thêm video vào ${unitLabel(vu())}.`; vRender(); };
+    vRender(); if(focusUnit) setTimeout(()=>$("vd-panel").scrollIntoView({behavior:"smooth"}),50); }
   $("cw-target").onchange=()=>{ target=$("cw-target").value; $("cw-msg").textContent=""; renderList(); };
   $("cw-reset").onclick=()=>{ delete S.unitWords[target]; buildWords(); save(); renderList(); $("cw-msg").textContent="Đã đưa bài về danh sách gợi ý."; };
   renderList();
