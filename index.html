@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Bé học tiếng Anh</title>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@500;700;800&display=swap">
 <style>
@@ -28,7 +31,7 @@
 [hidden]{display:none!important}
 body{margin:0}
 img{max-width:100%}
-input[type=text]{font:inherit;color:var(--ink);background:var(--tile);border:2px solid var(--line);border-radius:14px;padding:10px 12px;width:100%}
+input[type=text],input[type=password]{font:inherit;color:var(--ink);background:var(--tile);border:2px solid var(--line);border-radius:14px;padding:10px 12px;width:100%}
 html,body{min-height:100%}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.45;padding-inline:16px;padding-block:0 32px}
 .wrap{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
@@ -193,7 +196,7 @@ textarea{min-height:130px;resize:vertical}
 
 <script>
 let KID = (()=>{ try{ return localStorage.getItem("kien-english-name")||""; }catch(e){ return ""; } })();
-function setKid(n){ KID=n; try{ localStorage.setItem("kien-english-name",n); }catch(e){} }
+function setKid(n){ KID=n; try{ localStorage.setItem(LS_KEY==="kien-english"?"kien-english-name":LS_KEY+"-name",LS_KEY==="kien-english"?n:JSON.stringify(n)); }catch(e){} cloudSave(); }
 const DAILY_GOAL = 12;            // câu mỗi ngày (~8–10 phút cho bé lớp 1)
 const BOX_DAYS = [0,1,2,4,7,14];  // ôn lại sau bao nhiêu ngày, theo hộp Leitner
 const MASTER_BOX = 3;
@@ -299,10 +302,13 @@ const today = () => new Date().toLocaleDateString("en-CA");
 const addDays = (d,n) => { const x=new Date(d+"T00:00:00"); x.setDate(x.getDate()+n); return x.toLocaleDateString("en-CA"); };
 let S = {stars:0, words:{}, day:"", doneToday:0, streak:0, lastDay:"", updated:0, custom:[], unitWords:{}, curUnit:"u1"};
 function fixState(){ if(!Array.isArray(S.custom)) S.custom=[]; if(!S.unitWords||typeof S.unitWords!=="object") S.unitWords={}; if(!UNITS.some(u=>u.id===S.curUnit)) S.curUnit="u1"; }
-function loadLocal(){ try{ const s=JSON.parse(localStorage.getItem("kien-english")||"null"); if(s) S=Object.assign(S,s);}catch(e){} fixState(); }
+let LS_KEY="kien-english";
+const blankState=()=>({stars:0,words:{},day:"",doneToday:0,streak:0,lastDay:"",updated:0,custom:[],unitWords:{},curUnit:"u1"});
+function loadLocal(){ try{ const s=JSON.parse(localStorage.getItem(LS_KEY)||"null"); if(s) S=Object.assign(S,s);}catch(e){} fixState(); }
 function save(){
   S.updated=Date.now();
-  try{ localStorage.setItem("kien-english",JSON.stringify(S)); }catch(e){}
+  try{ localStorage.setItem(LS_KEY,JSON.stringify(S)); }catch(e){}
+  cloudSave();
 }
 
 let WORDS={}, ABC=null, BLEND=null, MINE=null;
@@ -853,10 +859,11 @@ function parent(){
     ${hard.length?`<label>Từ bé hay sai</label><div class="list">${hard.map(([k,v])=>{const w=WORDS[k]; return `<div><span>${esc(w.pic||"⭐")}</span><b>${esc(w.kw||w.en)}</b><span class="r">sai ${v.wrong} lần</span></div>`}).join("")}</div>`:`<p class="hint">Chưa có từ nào bé làm sai.</p>`}
   </div>
   <div class="panel">
-    <h3>Tên và sao lưu</h3>
+    <h3>Tài khoản và sao lưu</h3>
+    ${fbAuth?`<div class="row" style="justify-content:space-between;align-items:center"><p>Tài khoản: <b>${esc(accountName)}</b><br><span class="hint" id="sync-status">${esc(syncText())}</span></p><button class="btn ghost" id="logout">🚪 Đăng xuất</button></div>`:""}
     <label for="kid-rename">Tên của bé</label>
     <input type="text" id="kid-rename" maxlength="30" value="${esc(KID)}" autocomplete="off">
-    <p class="hint">Tiến độ chỉ lưu trong trình duyệt của máy này. Thỉnh thoảng bố mẹ bấm "Tải bản sao lưu" để giữ một bản, khi đổi máy hoặc xoá dữ liệu trình duyệt thì bấm "Khôi phục".</p>
+    <p class="hint">${fbAuth?"Tiến độ tự lưu lên mạng theo tài khoản, đăng nhập ở máy nào cũng học tiếp được. Nút sao lưu là để giữ thêm một bản trên máy.":"Tiến độ chỉ lưu trong trình duyệt của máy này."} Thỉnh thoảng bố mẹ bấm "Tải bản sao lưu" để giữ một bản, khi đổi máy hoặc xoá dữ liệu trình duyệt thì bấm "Khôi phục".</p>
     <div class="row" style="justify-content:flex-start"><button class="btn ghost" id="bk-save">💾 Tải bản sao lưu</button><label class="btn ghost" for="bk-load">📂 Khôi phục</label><input type="file" id="bk-load" accept="application/json,.json" hidden></div>
     <p class="hint" id="bk-msg"></p>
   </div>
@@ -871,6 +878,7 @@ function parent(){
     <div class="list" id="cw-list"></div>
   </div>`;
   bindBack(home);
+  if($("logout")) $("logout").onclick=()=>{ clearTimeout(cloudTimer); fbAuth.signOut(); };
   $("kid-rename").onchange=()=>{ const n=$("kid-rename").value.trim(); if(n){ setKid(n); $("bk-msg").textContent="Đã đổi tên."; } };
   $("bk-save").onclick=()=>{
     const blob=new Blob([JSON.stringify({app:"be-hoc-tieng-anh",name:KID,state:S},null,1)],{type:"application/json"});
@@ -880,7 +888,7 @@ function parent(){
   $("bk-load").onchange=async e=>{
     const f=e.target.files[0]; if(!f) return;
     try{ const d=JSON.parse(await f.text()); if(!d||d.app!=="be-hoc-tieng-anh"||!d.state) throw 0;
-      S=Object.assign({stars:0,words:{},day:"",doneToday:0,streak:0,lastDay:"",updated:0,custom:[],unitWords:{},curUnit:"u1"},d.state); fixState(); if(d.name) setKid(d.name);
+      S=Object.assign(blankState(),d.state); fixState(); if(d.name) setKid(d.name);
       buildWords(); save(); parent(); $("bk-msg").textContent="Đã khôi phục tiến độ."; }
     catch(err){ $("bk-msg").textContent="File này không phải bản sao lưu của app. Bố mẹ chọn lại file .json đã tải về nhé."; }
   };
@@ -916,6 +924,92 @@ function parent(){
   renderList();
 }
 
+// ---------- tài khoản (Firebase) ----------
+const FIREBASE_CONFIG = {"apiKey": "AIzaSyAAQPZQPMwcMXJcOpGRDzT2r42ecbU1BtE", "authDomain": "be-hoc-tieng-anh.firebaseapp.com", "projectId": "be-hoc-tieng-anh", "storageBucket": "be-hoc-tieng-anh.firebasestorage.app", "messagingSenderId": "634344849683", "appId": "1:634344849683:web:03e265ee67a96f34b39ae6"};
+const EMAIL_DOMAIN = "@be-hoc-tieng-anh.app"; // Firebase cần email, nên tên đăng nhập được ghép thành dạng email
+let fbAuth=null, fbDb=null, userDoc=null, cloudTimer=null, accountName="", syncState={ok:null,at:0,code:""};
+const loadingHtml=t=>`<div class="stage" style="margin-top:48px"><p class="prompt">${esc(t)}</p></div>`;
+function syncText(){
+  if(syncState.ok===null) return "☁️ Tiến độ đang được lưu theo tài khoản";
+  if(syncState.ok) return "☁️ Đã lưu lên mạng lúc "+new Date(syncState.at).toLocaleTimeString("vi-VN",{hour:"2-digit",minute:"2-digit"});
+  return "⚠️ Chưa lưu được lên mạng ("+syncState.code+"). App vẫn lưu trên máy này và sẽ thử lại ở lần lưu sau.";
+}
+function cloudSave(){
+  if(!userDoc) return;
+  clearTimeout(cloudTimer);
+  const doc=userDoc;
+  cloudTimer=setTimeout(()=>{
+    doc.set({name:KID, state:JSON.parse(JSON.stringify(S)), updated:S.updated||Date.now()})
+      .then(()=>{ syncState={ok:true,at:Date.now(),code:""}; })
+      .catch(e=>{ syncState={ok:false,at:Date.now(),code:e.code||"lỗi"}; })
+      .finally(()=>{ const el=$("sync-status"); if(el) el.textContent=syncText(); });
+  },800);
+}
+const readJSON=k=>{ try{ return JSON.parse(localStorage.getItem(k)||"null"); }catch(e){ return null; } };
+async function onUser(user){
+  clearTimeout(cloudTimer);
+  if(!user){ userDoc=null; accountName=""; LS_KEY="kien-english"; return loginScreen(); }
+  accountName=(user.email||"").replace(EMAIL_DOMAIN,"");
+  LS_KEY="kien-english-"+user.uid;
+  $app.innerHTML=loadingHtml("Đang tải tiến độ của bé…");
+  const doc=fbDb.collection("users").doc(user.uid);
+  let local=readJSON(LS_KEY), cloud=null, cloudOk=true;
+  try{ const snap=await doc.get(); cloud=snap.exists?snap.data():null; }
+  catch(e){ cloudOk=false; syncState={ok:false,at:Date.now(),code:e.code||"lỗi"}; }
+  let name=readJSON(LS_KEY+"-name");
+  // Tài khoản mới trên máy đã học từ trước: mang tiến độ cũ của máy này lên tài khoản
+  if(!cloud && !local && cloudOk){
+    local=readJSON("kien-english");
+    if(!name){ try{ name=localStorage.getItem("kien-english-name")||""; }catch(e){} }
+  }
+  const useCloud = !!cloud && (!local || (cloud.updated||0) >= (local.updated||0));
+  S=Object.assign(blankState(), useCloud ? (cloud.state||{}) : (local||{}));
+  KID=(useCloud ? cloud.name : (name || (cloud&&cloud.name))) || "";
+  fixState(); buildWords(); rollDay();
+  userDoc=doc;
+  try{ localStorage.setItem(LS_KEY,JSON.stringify(S)); localStorage.setItem(LS_KEY+"-name",JSON.stringify(KID)); }catch(e){}
+  if(!useCloud && (local||KID)) cloudSave();
+  KID ? home() : welcome();
+}
+const BAD_LOGIN="Sai tên đăng nhập hoặc mật khẩu.";
+const AUTH_MSG={"auth/invalid-credential":BAD_LOGIN,"auth/invalid-login-credentials":BAD_LOGIN,"auth/wrong-password":BAD_LOGIN,"auth/user-not-found":BAD_LOGIN,
+  "auth/email-already-in-use":"Tên đăng nhập này đã có người dùng, bố mẹ chọn tên khác nhé.",
+  "auth/weak-password":"Mật khẩu cần ít nhất 6 ký tự.",
+  "auth/network-request-failed":"Máy đang không có mạng. Bố mẹ kiểm tra wifi rồi thử lại.",
+  "auth/too-many-requests":"Thử sai nhiều lần quá, đợi vài phút rồi thử lại nhé.",
+  "auth/operation-not-allowed":"Firebase chưa bật cách đăng nhập Email/Password.",
+  "auth/invalid-email":"Tên đăng nhập chỉ dùng chữ không dấu, số, dấu chấm hoặc gạch ngang."};
+function loginScreen(mode){
+  const signup=mode==="signup";
+  $app.innerHTML=`<div class="top"><div class="hello"><small>Bé học tiếng Anh</small><h1>${signup?"Tạo tài khoản 🌟":"Đăng nhập 👋"}</h1></div></div>
+  <form class="panel" id="login-form" novalidate>
+    <label for="login-user">Tên đăng nhập</label>
+    <input type="text" id="login-user" maxlength="30" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="ví dụ: trungkien">
+    <label for="login-pass">Mật khẩu</label>
+    <input type="password" id="login-pass" autocomplete="${signup?"new-password":"current-password"}" placeholder="ít nhất 6 ký tự">
+    ${signup?`<label for="login-pass2">Nhập lại mật khẩu</label><input type="password" id="login-pass2" autocomplete="new-password">`:""}
+    <p class="feedback no" id="login-msg" aria-live="polite" style="font-size:17px;min-height:0"></p>
+    <div class="row" style="justify-content:space-between;align-items:center">
+      <button class="btn go" id="login-go" type="submit">${signup?"Tạo tài khoản":"Đăng nhập"}</button>
+      <button class="btn ghost" id="login-switch" type="button">${signup?"← Đã có tài khoản":"Tạo tài khoản mới"}</button>
+    </div>
+    <p class="hint">${signup?"Tên đăng nhập viết liền, không dấu. Bố mẹ ghi lại mật khẩu để đăng nhập trên máy khác.":"Đăng nhập một lần, máy sẽ nhớ cho những lần sau."}</p>
+  </form>`;
+  $("login-switch").onclick=()=>loginScreen(signup?"login":"signup");
+  $("login-form").onsubmit=async e=>{
+    e.preventDefault();
+    const msg=$("login-msg"), btn=$("login-go");
+    const u=$("login-user").value.trim().toLowerCase(), pw=$("login-pass").value;
+    if(!/^[a-z0-9._-]{3,30}$/.test(u)){ msg.textContent="Tên đăng nhập cần 3–30 ký tự: chữ không dấu, số, dấu chấm hoặc gạch ngang."; return; }
+    if(pw.length<6){ msg.textContent="Mật khẩu cần ít nhất 6 ký tự."; return; }
+    if(signup && pw!==$("login-pass2").value){ msg.textContent="Hai lần nhập mật khẩu chưa giống nhau."; return; }
+    msg.textContent=""; btn.disabled=true; btn.textContent="Đang xử lý…";
+    try{ signup ? await fbAuth.createUserWithEmailAndPassword(u+EMAIL_DOMAIN,pw) : await fbAuth.signInWithEmailAndPassword(u+EMAIL_DOMAIN,pw); }
+    catch(err){ msg.textContent=AUTH_MSG[err.code]||("Chưa đăng nhập được ("+(err.code||err.message)+")."); btn.disabled=false; btn.textContent=signup?"Tạo tài khoản":"Đăng nhập"; }
+  };
+  $("login-user").focus();
+}
+
 // ---------- welcome ----------
 function welcome(){
   $app.innerHTML=`<div class="top"><div class="hello"><small>Xin chào</small><h1>Bé học tiếng Anh 👋</h1></div></div>
@@ -931,7 +1025,12 @@ function welcome(){
 }
 
 // ---------- boot ----------
-loadLocal(); buildWords(); rollDay(); KID ? home() : welcome();
+loadLocal(); buildWords(); rollDay();
+if(FIREBASE_CONFIG && window.firebase){
+  try{ firebase.initializeApp(FIREBASE_CONFIG); fbAuth=firebase.auth(); fbDb=firebase.firestore();
+    $app.innerHTML=loadingHtml("Đang mở app…"); fbAuth.onAuthStateChanged(onUser); }
+  catch(e){ fbAuth=null; KID ? home() : welcome(); }
+} else KID ? home() : welcome();
 
 </script>
 </body>
